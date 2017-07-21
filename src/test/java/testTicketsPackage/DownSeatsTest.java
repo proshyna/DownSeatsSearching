@@ -39,10 +39,31 @@ public class DownSeatsTest {
         expectedCarriageTypes.add("Купе");
 
         List<String> expectedTrainsNum = new ArrayList<String>();
-        //  expectedTrainsNum.add("357 К");
-        expectedTrainsNum.add("081 К");
-        expectedTrainsNum.add("049 К");
+        expectedTrainsNum.add("358 Л");
+        expectedTrainsNum.add("112 Л");
+        expectedTrainsNum.add("144 Л");
+        //Для поиска любых мест
 
+        for (String typeUnit : expectedCarriageTypes) {
+            for (String trainUnit : expectedTrainsNum) {
+                try {
+                    WebElement foundedButton = driver.findElement(
+                            By.xpath("//td[@class='num']/a[contains (text(),'"
+                                    + trainUnit + "')]/../../td[@class='place']/div[@title='"
+                                    + typeUnit + "'][b>=2]/button"));
+                    if (foundedButton!=null)
+                    {
+                        sendNotificationOnEmail();
+                    }
+
+                } catch (NoSuchElementException e) {
+                }
+            }
+        }
+    }
+
+        //Для поиска нижних мест
+      /*
         List<WebElement> buttons = new ArrayList<WebElement>();
         for (String typeUnit : expectedCarriageTypes) {
             for (String trainUnit : expectedTrainsNum) {
@@ -56,7 +77,12 @@ public class DownSeatsTest {
                 }
             }
         }
-        for (WebElement buttonUnit : buttons) {
+
+
+
+
+
+     for (WebElement buttonUnit : buttons) {
             buttonUnit.click();
             try {
                 myDynamicElement.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
@@ -86,6 +112,7 @@ public class DownSeatsTest {
                 } else {
                     System.out.println("Нижних мест НЕТУ в вагоне " + i + "");
                 }
+
             }
             driver.findElement(By.xpath("//div[@class='vToolsPopupHeader']/a[@href='javascript://']")).click();
             try {
@@ -106,7 +133,7 @@ public class DownSeatsTest {
 
     private List<WebElement> getCoaches() {
         return driver.findElements(By.xpath("//span[@class='coaches']/a"));
-    }
+    }*/
 
 
     private void filters() {  // Searching for trains with defined filters
@@ -121,32 +148,32 @@ public class DownSeatsTest {
         }
 
         driver.findElement(By.xpath("//ul[@id=\"langs\"]//li[1]//b")).click();
-        driver.findElement(By.name("station_from")).sendKeys("Київ");
+        driver.findElement(By.name("station_from")).sendKeys("Тернопіль");
 
         try {
             myDynamicElement.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//ul[@id=\"ui-id-1\"]/li[contains(text(),'Київ')][1]")));
+                    By.xpath("//ul[@id=\"ui-id-1\"]/li[contains(text(),'Тернопіль')][1]")));
         } catch (Exception e) {
             System.out.println("Somthing wrong :( " + e.toString());
         }
 
         driver.findElement(By.name("station_from")).sendKeys(Keys.ENTER);
-        driver.findElement(By.name("station_till")).sendKeys("Тернопіль");
+        driver.findElement(By.name("station_till")).sendKeys("Київ");
 
         try {
             myDynamicElement.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//ul[@id=\"ui-id-2\"]/li[contains(text(),\"Тернопіль\")][1]")));
+                    By.xpath("//ul[@id=\"ui-id-2\"]/li[contains(text(),\"Київ\")][1]")));
         } catch (Exception e) {
             System.out.println("Somthing wrong :( " + e.toString());
         }
 
         driver.findElement(By.name("station_till")).sendKeys(Keys.ENTER);
         driver.findElement(By.id("date_dep")).click();
-        driver.findElement(By.xpath("//td[@data-month='6']//a[text()='4']")).click();
+        driver.findElement(By.xpath("//td[@data-month='7']//a[text()='13']")).click();
 
         try {
             myDynamicElement.until(ExpectedConditions.invisibilityOfElementLocated(
-                    By.xpath("//td[@data-month='6']//a[text()='4']")));
+                    By.xpath("//td[@data-month='7']//a[text()='13']")));
         } catch (Exception e) {
             System.out.println("Somthing wrong :( " + e.toString());
         }
